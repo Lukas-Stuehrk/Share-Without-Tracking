@@ -38,7 +38,7 @@ class ShareViewController: UIViewController {
             for attachment in item.attachments ?? [] {
                 guard attachment.hasItemConformingToTypeIdentifier("public.url") else { continue }
                 group.enter()
-                attachment.loadItem(forTypeIdentifier: "public.url") { maybeItem, maybeError  in
+                attachment.loadObject(ofClass: NSURL.self) { maybeItem, maybeError  in
                     defer { group.leave() }
                     guard let url = maybeItem as? NSURL as? URL else { return }
                     allSharedUrls.append(url)
