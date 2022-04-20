@@ -1,5 +1,5 @@
 import UIKit
-
+import Rules
 
 class ShareViewController: UIViewController {
 
@@ -70,29 +70,12 @@ func highlightDifferences(initialUrl: URL, newUrl: URL) -> NSAttributedString {
 }
 
 
+private let ruleSet: [ParameterRemovalRule] = .read()
+
+
 extension URL {
     func trackingParametersRemoved() -> URL {
-        guard var components = URLComponents(string: absoluteString) else {
-            assertionFailure()
-            return self
-        }
-
-        guard var queryItems = components.queryItems else {
-            return self
-        }
-        queryItems.removeAll(where: { ["s", "t"].contains($0.name) })
-        if queryItems.isEmpty {
-            components.queryItems = nil
-        } else {
-            components.queryItems = queryItems
-        }
-
-        guard let newUrl = components.url else {
-            assertionFailure()
-            return self
-        }
-
-        return newUrl
+        apply(ruleSet: ruleSet)
     }
 }
 
