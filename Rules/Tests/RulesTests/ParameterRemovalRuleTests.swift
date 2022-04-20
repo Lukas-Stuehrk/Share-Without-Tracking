@@ -55,6 +55,23 @@ final class ParameterRemovalRuleTests: XCTestCase {
 
         XCTAssertEqual(url, cleanedUpUrl)
     }
+
+    func testItShouldSupportWildcardHosts() {
+        let rule = ParameterRemovalRule(host: "*.stuehrk.net", parametersToBeRemoved: [])
+
+        let matchingUrl = URL(testUrl: "https://lukas.stuehrk.net")
+        let notMatchingUrl = URL(testUrl: "https://example.com")
+
+        XCTAssertTrue(rule.matches(url: matchingUrl))
+        XCTAssertFalse(rule.matches(url: notMatchingUrl))
+    }
+
+    func testItShouldSupportGlobalWildcardHost() {
+        let rule = ParameterRemovalRule(host: "*", parametersToBeRemoved: [])
+
+        XCTAssertTrue(rule.matches(url: URL(testUrl: "https://example.com")))
+        XCTAssertTrue(rule.matches(url: URL(testUrl: "https://lukas.stuerk.net")))
+    }
 }
 
 

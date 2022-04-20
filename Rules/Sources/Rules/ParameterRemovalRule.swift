@@ -11,7 +11,13 @@ public struct ParameterRemovalRule: Codable, Equatable, Hashable {
     }
 
     public func matches(url: URL) -> Bool {
-        url.host == matchingHost
+        guard let host = url.host else { return false }
+        let pattern = matchingHost.replacingOccurrences(of: ".", with: "\\.").replacingOccurrences(of: "*", with: ".*")
+        guard let regex = try? NSRegularExpression(pattern: "^\(pattern)$") else {
+            assertionFailure()
+            return false
+        }
+        return regex.firstMatch(in: host, range: NSRange(location: 0, length: host.utf16.count)) != nil
     }
 
     public func apply(on originalUrl: URL) -> URL {

@@ -11,7 +11,8 @@ struct Share_Without_TrackingApp: App {
                 .init(host: "twitter.com", parametersToBeRemoved: ["s", "t"]),
                 .init(host: "mobile.twitter.com", parametersToBeRemoved: ["s", "t"]),
                 .init(host: "www.instagram.com", parametersToBeRemoved: ["igshid"]),
-                .init(host: "medium.com", parametersToBeRemoved: ["source"])
+                .init(host: "medium.com", parametersToBeRemoved: ["source"]),
+                .init(host: "*", parametersToBeRemoved: ["utm_content", "utm_term", "utm_campaign", "utm_medium", "utm_source", "utm_id"]),
             ]
             defaultRuleSet.write()
         }
