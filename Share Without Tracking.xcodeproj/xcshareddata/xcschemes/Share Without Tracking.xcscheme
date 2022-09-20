@@ -43,8 +43,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8CE8F4042801802F00BC33E5"
-               BuildableName = "Share Without TrackingUITests.xctest"
-               BlueprintName = "Share Without TrackingUITests"
+               BuildableName = "End-to-end Tests.xctest"
+               BlueprintName = "End-to-end Tests"
                ReferencedContainer = "container:Share Without Tracking.xcodeproj">
             </BuildableReference>
          </TestableReference>
