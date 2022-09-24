@@ -12,42 +12,60 @@ class ShareViewController: UIViewController {
         super.viewDidAppear(animated)
 
         getSharedUrls { [weak self] urls in
-            self?.activityIndicator?.stopAnimating()
-
-            // When an URL is shared, there are multiple versions of the URL in the shared attachments. One version of
-            // the URL is without any query parameters, even the ones which are not required. To get the actual URL
-            // which was shared, we simply take the longest URL.
-            guard let relevantUrl = urls.longestUrl else { return }
-            let newUrl = relevantUrl.trackingParametersRemoved()
-            self?.label?.attributedText = NSAttributedString(
-                highlightDifferences(
-                    initialUrl: relevantUrl,
-                    newUrl: newUrl
-                )
-            )
-
-            let share = UIActivityViewController(activityItems: [newUrl as NSURL], applicationActivities: nil)
-            share.completionWithItemsHandler = { _, _, _, _ in
-                self?.extensionContext?.completeRequest(returningItems: [])
-            }
-            self?.present(share, animated: false)
-
+            self?.displaySharedUrl(urls: urls)
         }
+    }
+
+    func displaySharedUrl(urls: [URL]) {
+        activityIndicator?.stopAnimating()
+        // When an URL is shared, there are multiple versions of the URL in the shared attachments. One version of
+        // the URL is without any query parameters, even the ones which are not required. To get the actual URL
+        // which was shared, we simply take the longest URL.
+        guard let relevantUrl = urls.longestUrl else { return }
+        let newUrl = relevantUrl.trackingParametersRemoved()
+        label?.attributedText = NSAttributedString(
+            highlightDifferences(
+                initialUrl: relevantUrl,
+                newUrl: newUrl
+            )
+        )
+
+        let share = UIActivityViewController(activityItems: [newUrl as NSURL], applicationActivities: nil)
+        share.completionWithItemsHandler = { _, _, _, _ in
+            self.extensionContext?.completeRequest(returningItems: [])
+        }
+        present(share, animated: false)
     }
 
     func getSharedUrls(callback: @escaping ([URL]) -> Void) {
 
         var allSharedUrls: [URL] = []
 
+        let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
         let group = DispatchGroup()
         for item in extensionContext?.inputItems as? [NSExtensionItem] ?? [] {
             for attachment in item.attachments ?? [] {
-                guard attachment.hasItemConformingToTypeIdentifier("public.url") else { continue }
-                group.enter()
-                attachment.loadObject(ofClass: NSURL.self) { maybeItem, maybeError  in
-                    defer { group.leave() }
-                    guard let url = maybeItem as? NSURL as? URL else { return }
-                    allSharedUrls.append(url)
+                if attachment.hasItemConformingToTypeIdentifier("public.url") {
+                    group.enter()
+                    attachment.loadObject(ofClass: NSURL.self) { maybeItem, maybeError  in
+                        defer { group.leave() }
+                        guard let url = maybeItem as? NSURL as? URL else { return }
+                        allSharedUrls.append(url)
+                    }
+                } else if attachment.hasItemConformingToTypeIdentifier("public.text"), let detector = detector {
+                    group.enter()
+                    // TODO: Find out why `attachment.loadObject(NSString.self)` doesn't work.
+                    // loadItem is significantly slower.
+                    attachment.loadItem(forTypeIdentifier: "public.plain-text") { maybeItem, maybeError in
+                        defer { group.leave() }
+                        guard let nsString = maybeItem as? NSString else { return }
+                        let string = nsString as String
+                        for result in detector.matches(in: string, range: NSRange(location: 0, length: nsString.length)) {
+                            if let url = result.url {
+                                allSharedUrls.append(url)
+                            }
+                        }
+                    }
                 }
             }
         }
