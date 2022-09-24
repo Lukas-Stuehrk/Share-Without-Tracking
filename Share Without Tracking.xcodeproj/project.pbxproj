@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8C0CF048280D751000D16F8B /* Rules in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0CF047280D751000D16F8B /* Rules */; };
 		8C0CF04A280D751700D16F8B /* Rules in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0CF049280D751700D16F8B /* Rules */; };
+		8C64167428DF42800096EF7C /* UserInterface in Frameworks */ = {isa = PBXBuildFile; productRef = 8C64167328DF42800096EF7C /* UserInterface */; };
 		8C94625828D7BE6100B4BB9E /* ShareWithoutTrackingSharingExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94625728D7BE6100B4BB9E /* ShareWithoutTrackingSharingExtension.swift */; };
 		8C94625A28DA035F00B4BB9E /* RemindersExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94625928DA035F00B4BB9E /* RemindersExtension.swift */; };
 		8C94625D28DA5A5F00B4BB9E /* XCTestCase+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C94625C28DA5A5F00B4BB9E /* XCTestCase+Extensions.swift */; };
@@ -70,6 +71,7 @@
 /* Begin PBXFileReference section */
 		8C0CF044280CCFCC00D16F8B /* Share Without Tracking.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Share Without Tracking.entitlements"; sourceTree = "<group>"; };
 		8C0CF045280D74FC00D16F8B /* Rules */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Rules; sourceTree = "<group>"; };
+		8C64167228DF42100096EF7C /* UserInterface */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = UserInterface; sourceTree = "<group>"; };
 		8C7BAD0328100003001820BA /* SharingExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SharingExtension.entitlements; sourceTree = "<group>"; };
 		8C94625728D7BE6100B4BB9E /* ShareWithoutTrackingSharingExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareWithoutTrackingSharingExtension.swift; sourceTree = "<group>"; };
 		8C94625928DA035F00B4BB9E /* RemindersExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersExtension.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C0CF04A280D751700D16F8B /* Rules in Frameworks */,
+				8C64167428DF42800096EF7C /* UserInterface in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -159,6 +162,7 @@
 		8CE8F3E22801802D00BC33E5 = {
 			isa = PBXGroup;
 			children = (
+				8C64167228DF42100096EF7C /* UserInterface */,
 				8C0CF045280D74FC00D16F8B /* Rules */,
 				8CE8F3ED2801802D00BC33E5 /* Share Without Tracking */,
 				8CE8F3FE2801802F00BC33E5 /* Share Without TrackingTests */,
@@ -324,6 +328,7 @@
 			name = SharingExtension;
 			packageProductDependencies = (
 				8C0CF049280D751700D16F8B /* Rules */,
+				8C64167328DF42800096EF7C /* UserInterface */,
 			);
 			productName = SharingExtension;
 			productReference = 8CE8F41C2801805000BC33E5 /* SharingExtension.appex */;
@@ -847,6 +852,10 @@
 		8C0CF049280D751700D16F8B /* Rules */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Rules;
+		};
+		8C64167328DF42800096EF7C /* UserInterface */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UserInterface;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

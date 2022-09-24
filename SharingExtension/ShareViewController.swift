@@ -1,5 +1,6 @@
 import UIKit
 import Rules
+import UserInterface
 
 class ShareViewController: UIViewController {
 
@@ -18,7 +19,12 @@ class ShareViewController: UIViewController {
             // which was shared, we simply take the longest URL.
             guard let relevantUrl = urls.longestUrl else { return }
             let newUrl = relevantUrl.trackingParametersRemoved()
-            self?.label?.attributedText = highlightDifferences(initialUrl: relevantUrl, newUrl: newUrl)
+            self?.label?.attributedText = NSAttributedString(
+                highlightDifferences(
+                    initialUrl: relevantUrl,
+                    newUrl: newUrl
+                )
+            )
 
             let share = UIActivityViewController(activityItems: [newUrl as NSURL], applicationActivities: nil)
             share.completionWithItemsHandler = { _, _, _, _ in
@@ -53,22 +59,6 @@ class ShareViewController: UIViewController {
     }
 
 }
-
-
-func highlightDifferences(initialUrl: URL, newUrl: URL) -> NSAttributedString {
-    let string = NSMutableAttributedString(string: initialUrl.absoluteString)
-    let difference = newUrl.absoluteString.difference(from: initialUrl.absoluteString)
-    for change in difference.removals {
-        guard case let .remove(offset, _, _) = change else {
-            assertionFailure()
-            break
-        }
-        string.setAttributes([.foregroundColor: UIColor.red], range: NSRange(location: offset, length: 1))
-    }
-
-    return string
-}
-
 
 private let ruleSet: [ParameterRemovalRule] = .read()
 
